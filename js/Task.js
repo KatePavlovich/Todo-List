@@ -3,17 +3,27 @@ class Task {
   constructor(name) {
     this.name = name;
     this.isDone = false;
-    this.onDeleteCallback = null;
+    this.el = null;
+
+   
+
   }
 
   render() {
-    let li = document.createElement('li');
-    li.classList.add('item-style');
-    li.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""} />${this.name}<span>x</span>`);
+    if (this.el === null) {
+      this.createLi();
+    }
 
-    const deleteButton = li.querySelector('span');
+       return this.el;     
+  }
+
+  createLi() {
+    this.el = document.createElement('li');
+    this.el.classList.add('item-style');
+    this.el.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""} />${this.name}<span>x</span>`);
+
+    const deleteButton = this.el.querySelector('span');
     deleteButton.addEventListener('click', this._onDelete.bind(this));
-    return li;
   }
 
   _onDelete() {

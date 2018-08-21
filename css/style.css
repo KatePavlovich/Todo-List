@@ -1,5 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 body {
     font-family: 'Pacifico', cursive;
+    height: 100%;
+}
+.wrapper {
+    padding: 1em;
 }
 .select-wrapper {
     display: grid;
@@ -38,4 +46,14 @@ span {
 }
 span:hover {
     color: firebrick;
+}
+.content {
+    min-height: calc(100vh - 80px);
+}
+.done {
+    text-decoration: line-through;
+}
+.footer {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
 }
