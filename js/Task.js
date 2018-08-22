@@ -5,7 +5,6 @@ class Task {
     this.isDone = false;
     this.el = null;
 
-   
 
   }
 
@@ -24,11 +23,22 @@ class Task {
 
     const deleteButton = this.el.querySelector('span');
     deleteButton.addEventListener('click', this._onDelete.bind(this));
+
+    const checkBox = this.el.querySelector('input[type="checkbox"]');
+    checkBox.addEventListener('click', this._onIsDone.bind(this));
   }
 
   _onDelete() {
     if (!!this.onDeleteCallback) {
       this.onDeleteCallback(this);
     }
+  }
+
+  _onIsDone() {
+
+    if (!!this.onDoneCallback) {
+      this.onDoneCallback(this);
+    }
+
   }
 }
