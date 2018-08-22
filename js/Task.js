@@ -1,19 +1,15 @@
-//task class
 class Task {
   constructor(name) {
     this.name = name;
     this.isDone = false;
     this.el = null;
-
-
   }
 
   render() {
     if (this.el === null) {
       this.createLi();
     }
-
-       return this.el;     
+    return this.el;
   }
 
   createLi() {
@@ -35,10 +31,8 @@ class Task {
   }
 
   _onIsDone() {
-
     if (!!this.onDoneCallback) {
       this.onDoneCallback(this);
     }
-
   }
 }
