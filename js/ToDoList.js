@@ -10,13 +10,10 @@ class ToDoList {
     this.addTaskIntoArray();
     this._onDelete();
     this._onCheck();
-    this.showComplitedTasks();
-    //this.showActiveTasks();
-
   }
 
   _pushItemInArrayAndAddMethod(e) {
-    let taskName = document.querySelector('#itemInput').value;
+    let taskName = document.querySelector("#itemInput").value;
     let newTask = new Task(`${taskName}`);
     newTask.onDeleteCallback = this._onDelete.bind(this);
     newTask.onDoneCallback = this._onCheck.bind(this);
@@ -25,11 +22,15 @@ class ToDoList {
   }
 
   addTaskIntoArray() {
-    let createNewTaskButton = document.querySelector('#addNewItemButton');
-    createNewTaskButton.addEventListener('click', this._pushItemInArrayAndAddMethod.bind(this));
+    let createNewTaskButton = document.querySelector("#addNewItemButton");
+    createNewTaskButton.addEventListener(
+      "click",
+      this._pushItemInArrayAndAddMethod.bind(this)
+    );
     this._renderTasks(this._tasks);
   }
 
+  //render basic structure, call rendering tasks & footer
   render() {
     let element = document.querySelector(`#${this.elId}`);
     element.innerHTML = `<div class="content"><h3>${this.sectionName}</h3>
@@ -56,50 +57,61 @@ class ToDoList {
   }
 
   renderFooter() {
-    const footer = document.querySelector('footer');
-    footer.innerHTML = `<div>${this._tasks.length - this.doneTasks.length} items left</div>
-    <div>All</div>
+    const footer = document.querySelector("footer");
+    footer.innerHTML = `<div>${this._tasks.length -
+      this.doneTasks.length} items left</div>
+    <div id="allTasks">All</div>
     <div id="activeBtn">active</div>
-    <button id="complitedTasksShowButton">complited</button>`
+    <div id="complitedTasksShowButton">complited</div>`;
+    this.showComplitedTasks();
+    this.showActiveTasks();
+    this.showALLTasks();
   }
 
-
   _onDelete(task) {
-    this._tasks = this._tasks.filter((i) => i !== task);
+    this._tasks = this._tasks.filter(i => i !== task);
     this._renderTasks(this._tasks);
   }
 
+  //check if there is a task. if it is we check for task.isDone state. on this state depend will it be strike through or not & should we push it into this.doneTasks array
   _onCheck(task) {
     if (task) {
       if (task.isDone === false) {
         task.isDone = true;
-        task.el.classList.toggle('done');
+        task.el.classList.toggle("done");
         this.doneTasks.push(task);
-
       } else {
         task.isDone = false;
-        task.el.classList.toggle('done');
-        this.doneTasks = this.doneTasks.filter((i) => i !== task);
+        task.el.classList.toggle("done");
+        this.doneTasks = this.doneTasks.filter(i => i !== task);
       }
     }
     this._renderTasks(this._tasks);
   }
 
   showComplitedTasks() {
-    let complitedTasksShowButton = document.querySelector('#complitedTasksShowButton');
-    complitedTasksShowButton.addEventListener('click', this._getComplitedTasksArray.bind(this));
+    let complitedTasksShowButton = document.querySelector(
+      "#complitedTasksShowButton"
+    );
+    complitedTasksShowButton.addEventListener(
+      "click",
+      this._getComplitedTasksArray.bind(this)
+    );
   }
 
   _getComplitedTasksArray() {
     this._renderTasks(this.doneTasks);
   }
 
-  /*   showActiveTasks() {
-      let activeBtn = document.querySelector('#activeBtn');
-      console.log(this.doneTasks);
-      activeBtn.addEventListener('click',  console.log('жлтадоофыв'));
-      //this._renderTasks(this.doneTasks);
-    } */
+  showActiveTasks() {
+    let activeBtn = document.querySelector("#activeBtn");
+    activeBtn.addEventListener("click", () =>
+      this._renderTasks(this._tasks.filter(i => i.isDone === false))
+    );
+  }
 
-
+  showALLTasks() {
+    let allTasksBtn = document.querySelector("#allTasks");
+    allTasksBtn.addEventListener("click", () => this._renderTasks(this._tasks));
+  }
 }
