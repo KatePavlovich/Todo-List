@@ -78,11 +78,11 @@ class ToDoList {
     if (task) {
       if (task.isDone === false) {
         task.isDone = true;
-        task.el.classList.toggle("done");
+        task.el.querySelector('label').classList.toggle("done");
         this.doneTasks.push(task);
       } else {
         task.isDone = false;
-        task.el.classList.toggle("done");
+        task.el.querySelector('label').classList.toggle("done");
         this.doneTasks = this.doneTasks.filter(i => i !== task);
       }
     }

@@ -15,7 +15,7 @@ class Task {
   createLi() {
     this.el = document.createElement('li');
     this.el.classList.add('item-style');
-    this.el.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""} />${this.name}<span>x</span>`);
+    this.el.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""}  id="${new Date()}"/><label for="${new Date()}">${this.name}</label><span>x</span>`);
 
     const deleteButton = this.el.querySelector('span');
     deleteButton.addEventListener('click', this._onDelete.bind(this));
