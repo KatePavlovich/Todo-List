@@ -1,8 +1,9 @@
 class Task {
-  constructor(name) {
+  constructor(name, id, isDone) {
     this.name = name;
-    this.isDone = false;
+    this.isDone = isDone;
     this.el = null;
+    this.id = id;
   }
 
   render() {
@@ -15,7 +16,7 @@ class Task {
   createLi() {
     this.el = document.createElement('li');
     this.el.classList.add('item-style');
-    this.el.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""}  id="${new Date()}"/><label for="${new Date()}">${this.name}</label><span>x</span>`);
+    this.el.innerHTML = (`<input type="checkbox" ${this.isDone ? "checked" : ""}  id=${this.id} /><label for="${new Date()}">${this.name}</label><span>x</span>`);
 
     const deleteButton = this.el.querySelector('span');
     deleteButton.addEventListener('click', this._onDelete.bind(this));

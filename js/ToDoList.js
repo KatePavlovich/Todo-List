@@ -29,10 +29,7 @@ class ToDoList {
       "click",
       this._pushItemInArrayAndAddMethod.bind(this)
     );
-    createNewTaskButton.addEventListener(
-      "click",
-      this.createTask.bind(this)
-    );
+    this.sendTaskToDAL();
     this._renderTasks(this._tasks);
   }
 
@@ -50,43 +47,40 @@ class ToDoList {
 
     this.init();
     this.renderFooter();
-    
+
   }
 
   //get data from ajax response, transform it into new Task & render all tasks
   init() {
     this._dataService.initializeTasks((tasks) => {
-      // if(!!tasks) {
-      console.log(tasks);
       this._tasks = tasks.map((i) => new Task(`${i}`));
       this._tasks.every((i) => i.onDeleteCallback = this._onDelete.bind(this));
       this._tasks.every((i) => i.onDoneCallback = this._onCheck.bind(this));
 
       this._renderTasks(this._tasks);
-      console.log(`ёдвдыЖ ${this._tasks}`);
-
-      //}
     })
   }
+
+  sendTaskToDAL() {
+    let createNewTaskButton = document.querySelector("#addNewItemButton");
+    createNewTaskButton.addEventListener("click", this.createTask.bind(this));
+  }
+
 
   //get data for ajax request
-  crateTask() {
-    this._dataService.createTask((task, callback) => {
-      let newtask = {
-        title: task.name,
-        id: task.id,
-        done: task.done
-      }
-      
-      callback(newtask);
-    })
+  createTask() {
+    let newtask = document.querySelector("#itemInput").value;
+    var cb = (callback) => {
+      callback();
+    };
+    this._dataService.createTask(newtask, cb);
   }
 
-   _renderTasks(arr) {
-        console.log(this._tasks);
-        const tasksBlock = document.querySelector('[data-role="tasks"]');
-        tasksBlock.innerHTML = ""; // clear from old
-        for(let i = 0; i<arr.length; i++) {
+  _renderTasks(arr) {
+    console.log(this._tasks);
+    const tasksBlock = document.querySelector('[data-role="tasks"]');
+    tasksBlock.innerHTML = ""; // clear from old
+    for (let i = 0; i < arr.length; i++) {
       tasksBlock.append(arr[i].render());
     }
 

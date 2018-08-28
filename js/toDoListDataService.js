@@ -7,7 +7,8 @@ class ToDoListAjaxDataService {
             },
 
             success: function (data) {
-                let tasksArr = data.map((i) => (i.original));
+                console.log(data);
+                let tasksArr = data.map((i) => (i.title));
 
                 successCallBack(tasksArr);
             },
@@ -19,14 +20,14 @@ class ToDoListAjaxDataService {
 
         $.ajax({
             url: 'https://repetitora.net/api/JS/Tasks',
-            type: "post",
+            type: "POST",
             data: {
                 widgetId: 123754,
                 title: title,
             },
             success: function (response) {
                 debugger;
-                successCallBack(response.task);
+                successCallBack(response);
             },
         })
 
