@@ -9,7 +9,7 @@ class ToDoList {
     this._dataService = new ToDoListAjaxDataService();
 
     this.render();
-    this.addTaskIntoArray();
+    this.addNewTask();
     this._onDelete();
     this._onCheck();
   }
@@ -23,12 +23,12 @@ class ToDoList {
     this._renderTasks(this._tasks);
   }
 
-  addTaskIntoArray() {
-    let createNewTaskButton = document.querySelector("#addNewItemButton");
+  addNewTask() {
+/*     let createNewTaskButton = document.querySelector("#addNewItemButton");
     createNewTaskButton.addEventListener(
       "click",
       this._pushItemInArrayAndAddMethod.bind(this)
-    );
+    ); */
     this.sendTaskToDAL();
     this._renderTasks(this._tasks);
   }
@@ -53,10 +53,13 @@ class ToDoList {
   //get data from ajax response, transform it into new Task & render all tasks
   init() {
     this._dataService.initializeTasks((tasks) => {
-      this._tasks = tasks.map((i) => new Task(`${i}`));
+      console.log(tasks);
+      this._tasks = tasks.map((i) => new Task(i.title, i.id, i.done));
       this._tasks.every((i) => i.onDeleteCallback = this._onDelete.bind(this));
       this._tasks.every((i) => i.onDoneCallback = this._onCheck.bind(this));
 
+
+      console.log(this._tasks);
       this._renderTasks(this._tasks);
     })
   }
@@ -64,6 +67,8 @@ class ToDoList {
   sendTaskToDAL() {
     let createNewTaskButton = document.querySelector("#addNewItemButton");
     createNewTaskButton.addEventListener("click", this.createTask.bind(this));
+
+    this.init();
   }
 
 
@@ -71,13 +76,15 @@ class ToDoList {
   createTask() {
     let newtask = document.querySelector("#itemInput").value;
     var cb = (callback) => {
-      callback();
-    };
+
+       callback();
+     };
     this._dataService.createTask(newtask, cb);
+    //this._tasks.push(newtask);
   }
 
   _renderTasks(arr) {
-    console.log(this._tasks);
+    //console.log(this._tasks);
     const tasksBlock = document.querySelector('[data-role="tasks"]');
     tasksBlock.innerHTML = ""; // clear from old
     for (let i = 0; i < arr.length; i++) {
@@ -100,8 +107,17 @@ class ToDoList {
   }
 
   _onDelete(task) {
+    //console.log(task.id);
+    if (task) {
+    let cb = (callback) => {
+     // response = response.filter(i => i !== taskId);
+      callback();
+    };
+    this._dataService.deleteTask(task.id, cb);
+
     this._tasks = this._tasks.filter(i => i !== task);
     this._renderTasks(this._tasks);
+  }
   }
 
   //check if there is a task. if it is we check for task.isDone state. on this state depend will it be strike through or not & should we push it into this.doneTasks array

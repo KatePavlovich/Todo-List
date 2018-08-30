@@ -7,10 +7,7 @@ class ToDoListAjaxDataService {
             },
 
             success: function (data) {
-                console.log(data);
-                let tasksArr = data.map((i) => (i.title));
-
-                successCallBack(tasksArr);
+                successCallBack(data);
             },
             type: "get"
         })
@@ -23,11 +20,28 @@ class ToDoListAjaxDataService {
             type: "POST",
             data: {
                 widgetId: 123754,
-                title: title,
+                title: title
             },
             success: function (response) {
-                debugger;
                 successCallBack(response);
+            },
+        })
+
+    }
+
+    deleteTask(taskId, successCallBack) {
+
+        $.ajax({
+            url: 'https://repetitora.net/api/JS/Tasks',
+            type: "delete",
+            data: {
+                widgetId: 123754,
+                taskId : taskId 
+            },
+            success: function (data) {
+                console.log(data);
+
+                successCallBack(data);
             },
         })
 
