@@ -36,7 +36,7 @@ class ToDoListAjaxDataService {
             type: "delete",
             data: {
                 widgetId: 123754,
-                taskId : taskId 
+                taskId
             },
             success: function (data) {
                 console.log(data);
@@ -44,6 +44,24 @@ class ToDoListAjaxDataService {
                 successCallBack(data);
             },
         })
+    }
 
+    updateTask(taskId, title, done, successCallBack) {
+
+        $.ajax({
+            url: 'https://repetitora.net/api/JS/Tasks',
+            type: "put",
+            data: {
+                widgetId: 123754,
+                taskId,
+                title,
+                done
+            },
+            success: function (data) {
+                console.log(data);
+
+                successCallBack(data);
+            },
+        })
     }
 }
