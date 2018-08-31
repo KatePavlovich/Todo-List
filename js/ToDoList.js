@@ -33,10 +33,9 @@ class ToDoList {
     this._dataService.initializeTasks((tasks) => {
       console.log(tasks);
       this._tasks = tasks.map((i) => new Task(i.title, i.id, i.done));
-      this._tasks.every((i) => i.onDeleteCallback = this._onDelete.bind(this));
-      this._tasks.every((i) => i.onDoneCallback = this._onCheck.bind(this));
+      this._tasks.forEach((i) => i.onDeleteCallback = this._onDelete.bind(this));
+      this._tasks.forEach((i) => i.onDoneCallback = this._onCheck.bind(this));
 
-      console.log(this._tasks);
       this._renderTasks(this._tasks);
     })
   }
@@ -44,19 +43,19 @@ class ToDoList {
   sendTaskToDAL() {
     let createNewTaskButton = document.querySelector("#addNewItemButton");
     createNewTaskButton.addEventListener("click", this.createTask.bind(this));
-    createNewTaskButton.addEventListener("click", this.init.bind(this));
   }
 
   //get data for ajax request
   createTask() {
     let newtask = document.querySelector("#itemInput").value;
-    var cb = (callback) => callback();
+    this._dataService._sendRequest('post', this._tasksReceived.bind(this), newtask);
+  }
 
-    this._dataService.createTask(newtask, cb);
+  _tasksReceived() {
+    this.init();
   }
 
   _renderTasks(arr) {
-    //console.log(this._tasks);
     const tasksBlock = document.querySelector('[data-role="tasks"]');
     tasksBlock.innerHTML = ""; // clear from old
     for (let i = 0; i < arr.length; i++) {
@@ -69,11 +68,7 @@ class ToDoList {
   //deleting tasks
   _onDelete(task) {
     if (task) {
-      let cb = (callback) => {
-        // response = response.filter(i => i !== taskId);
-        callback();
-      };
-      this._dataService.deleteTask(task.id, cb);
+      this._dataService._sendRequest('delete', this._tasksReceived.bind(this), '', task.id);
 
       this._tasks = this._tasks.filter(i => i !== task);
       this._renderTasks(this._tasks);
@@ -83,9 +78,6 @@ class ToDoList {
   //check if there is a task. if it is we check for task.isDone state. on this state depend will it be strike through or not & should we push it into this.doneTasks array
   _onCheck(task) {
     if (task) {
-      let cb = (callback) => {
-        callback();
-      };
       if (!task.isDone) {
         task.isDone = true;
         task.el.querySelector('label').classList.add("done");
@@ -93,8 +85,7 @@ class ToDoList {
         task.isDone = false;
         task.el.querySelector('label').classList.remove("done");
       }
-      this._dataService.updateTask(task.id, task.name, task.isDone, cb);
-
+      this._dataService._sendRequest('put', this._tasksReceived.bind(this), task.name, task.id, task.isDone);
     }
     this._renderTasks(this._tasks);
   }
@@ -102,17 +93,17 @@ class ToDoList {
   //footer bar for showing all, complited or active tasks
   renderFooter() {
     const footer = document.querySelector("footer");
-    footer.innerHTML = `<div>${this._tasks.length -
-      this.doneTasks.length} items left</div>
+    let activeItems = this._tasks.filter(i => i.isDone === false);
+    footer.innerHTML = `<div>${activeItems.length} items left</div>
     <div id="allTasks">All</div>
     <div id="activeBtn">active</div>
     <div id="complitedTasksShowButton">complited</div>`;
-    this.showComplitedTasks();
+    this.bindEventListenerOnComplitedTasks();
     this.showActiveTasks();
     this.showALLTasks();
   }
 
-  showComplitedTasks() {
+  bindEventListenerOnComplitedTasks() {
     let complitedTasksShowButton = document.querySelector("#complitedTasksShowButton");
     complitedTasksShowButton.addEventListener("click", this._getComplitedTasksArray.bind(this));
   }
