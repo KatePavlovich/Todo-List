@@ -48,7 +48,7 @@ class ToDoList {
   //get data for ajax request
   createTask() {
     let newtask = document.querySelector("#itemInput").value;
-    this._dataService._sendRequest('post', this._tasksReceived.bind(this), newtask);
+    this._dataService.createTask(newtask, this._tasksReceived.bind(this));
   }
 
   _tasksReceived() {
@@ -68,7 +68,7 @@ class ToDoList {
   //deleting tasks
   _onDelete(task) {
     if (task) {
-      this._dataService._sendRequest('delete', this._tasksReceived.bind(this), '', task.id);
+      this._dataService.deleteTask(task.id, this._tasksReceived.bind(this));
 
       this._tasks = this._tasks.filter(i => i !== task);
       this._renderTasks(this._tasks);
@@ -85,7 +85,7 @@ class ToDoList {
         task.isDone = false;
         task.el.querySelector('label').classList.remove("done");
       }
-      this._dataService._sendRequest('put', this._tasksReceived.bind(this), task.name, task.id, task.isDone);
+      this._dataService.updateTask(task.id, task.name, task.isDone, this._tasksReceived.bind(this));
     }
     this._renderTasks(this._tasks);
   }

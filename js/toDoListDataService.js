@@ -2,6 +2,7 @@ class ToDoListAjaxDataService {
     initializeTasks(successCallBack) {
         $.ajax({
             url: 'https://repetitora.net/api/JS/Tasks',
+            type: "get",
             data: {
                 widgetId: 123754,
                 count: 100
@@ -9,25 +10,54 @@ class ToDoListAjaxDataService {
 
             success: function (data) {
                 successCallBack(data);
-            },
-            type: "get"
+            }            
         })
     }
 
-     _sendRequest(type, successCallBack, title, taskId, done) {
+    createTask(title, successCallBack) {
+
         $.ajax({
             url: 'https://repetitora.net/api/JS/Tasks',
-            type,
+            type: "POST",
             data: {
                 widgetId: 123754,
-                title,
+                title: title
+            },
+            success: function (response) {
+                successCallBack(response);
+            },
+        })
+    }
+
+    deleteTask(taskId, successCallBack) {
+
+        $.ajax({
+            url: 'https://repetitora.net/api/JS/Tasks',
+            type: "delete",
+            data: {
+                widgetId: 123754,
+                taskId
+            },
+            success: function (data) {
+                successCallBack(data);
+            },
+        })
+    }
+
+    updateTask(taskId, title, done, successCallBack) {
+
+        $.ajax({
+            url: 'https://repetitora.net/api/JS/Tasks',
+            type: "put",
+            data: {
+                widgetId: 123754,
                 taskId,
+                title,
                 done
             },
             success: function (data) {
                 successCallBack(data);
             },
         })
-    } 
-
+    }
 }
