@@ -10,4 +10,4 @@ Learning and enforcing good structural and practical strategies for JavaScript d
 
 ## Appearance
 
-![alt text](https://github.com/KatePavlovich/Todo-List/img/screenshot.jpg "screenshot")
+![alt text](https://github.com/KatePavlovich/Todo-List/blob/master/img/screenshot.jpg?raw=true "screenshot")
